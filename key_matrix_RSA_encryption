@@ -30,7 +30,7 @@ def plaintext_encode(plaintext: str, m: int) -> str:
     n = p * q # n is part of public and private keys
     phi = (p - 1) * (q - 1) # totient: number of integers less than n coprime to n
 
-    # choose n, a value between 1 and phi(n) coprime to phi(n)
+    # choose e, a value between 1 and phi(n) coprime to phi(n)
     e = secrets.randbelow(phi)
     while sp.gcd(e, phi) != 1:
         e = secrets.randbelow(phi)
