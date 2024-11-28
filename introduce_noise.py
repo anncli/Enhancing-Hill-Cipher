@@ -21,7 +21,7 @@ def plaintext_encode(plaintext: str, m: int, noise_percentage: int) -> str:
         for i in range(m):
             for j in range(m):
                 key_matrix[i, j] = secrets.randbelow(26)
-    
+
 
     # convert plaintext into mx1 vector
     plaintext_matrix = []
@@ -35,6 +35,7 @@ def plaintext_encode(plaintext: str, m: int, noise_percentage: int) -> str:
     # convert values to valid range (0-25)
     ciphertext_matrix = ciphertext_matrix % 26
 
+    
     # add noise with a given probability
     noise_matrix = np.zeros_like(ciphertext_matrix)
     for i in range(m):
@@ -44,15 +45,18 @@ def plaintext_encode(plaintext: str, m: int, noise_percentage: int) -> str:
         noise_matrix[i, 0] = secrets.randbelow(26) # add random noise in range 0 to 25
     noisy_ciphertext_matrix = (ciphertext_matrix + noise_matrix) % 26
 
+
     # convert ciphertext matrix into ciphertext
     ciphertext = ""
     for k in range(m):
         ciphertext += num_to_letters[ciphertext_matrix[k, 0]]
 
+
     # convert noisy ciphertext matrix into noisy_ciphertext
     noisy_ciphertext = ""
     for k in range(m):
         noisy_ciphertext += num_to_letters[noisy_ciphertext_matrix[k, 0]]
+
 
     print("Key Matrix:\n", key_matrix)
     print("Plaintext Matrix:\n", plaintext_matrix)
