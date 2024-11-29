@@ -18,10 +18,19 @@ def plaintext_encode(plaintext: str, m: int, use_existing_key=False) -> str:
 
         # insert random values into key matrix
         # we need an invertible key matrix for decoding
-        while np.linalg.det(key_matrix) == 0: # continue generating key matrices until an invertible one is found
+        key_inverse = np.zeros((m, m))
+        while True: # continue generating key matrices until an invertible one is found
             for i in range(m):
                 for j in range(m):
                     key_matrix[i, j] = secrets.randbelow(26)
+            
+            if np.linalg.det(key_matrix) == 0:
+                continue
+            
+            key_inverse = np.linalg.inv(key_matrix)
+            if np.array_equal(key_inverse, np.round(key_inverse)):
+                print(key_inverse)
+                break
         
         np.savetxt('key_matrix.txt', key_matrix, fmt="%d")
     else:
@@ -52,8 +61,8 @@ def plaintext_encode(plaintext: str, m: int, use_existing_key=False) -> str:
 
 if __name__=="__main__":
     # set parameters for testing
-    m = 3 # key matrix dimensions
-    plaintext = "CAT"
+    m = 2 # key matrix dimensions
+    plaintext = "AT"
 
     print("Plaintext:", plaintext)
     ciphertext = plaintext_encode(plaintext, m)[0]
