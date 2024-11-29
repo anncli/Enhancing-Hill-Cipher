@@ -12,16 +12,20 @@ num_to_letters = dict({
     19: 'T', 20: 'U', 21: 'V', 22: 'W', 23: 'X', 24: 'Y', 25: 'Z'
 })
 
-def plaintext_encode(plaintext: str, m: int) -> str:
-    key_matrix = np.zeros((m, m)) # initialize empty key array
+def plaintext_encode(plaintext: str, m: int, use_existing_key=False) -> str:
+    if not use_existing_key:
+        key_matrix = np.zeros((m, m), dtype=int) # initialize empty key array
 
-    # insert random values into key matrix
-    # we need an invertible key matrix for decoding
-    while np.linalg.det(key_matrix) == 0: # continue generating key matrices until an invertible one is found
-        for i in range(m):
-            for j in range(m):
-                key_matrix[i, j] = secrets.randbelow(26)
-    
+        # insert random values into key matrix
+        # we need an invertible key matrix for decoding
+        while np.linalg.det(key_matrix) == 0: # continue generating key matrices until an invertible one is found
+            for i in range(m):
+                for j in range(m):
+                    key_matrix[i, j] = secrets.randbelow(26)
+        
+        np.savetxt('key_matrix.txt', key_matrix, fmt="%d")
+    else:
+        key_matrix = np.loadtxt('key_matrix.txt', dtype=int)
 
     # convert plaintext into mx1 vector
     plaintext_matrix = []

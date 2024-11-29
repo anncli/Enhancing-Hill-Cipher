@@ -14,7 +14,7 @@ num_to_letters = dict({
 })
 
 def noise_encode(plaintext: str, m: int, noise_percentage: int) -> str:
-    ciphertext, ciphertext_matrix = plaintext_encode(plaintext, m)
+    ciphertext, ciphertext_matrix = plaintext_encode(plaintext, m, True)
 
     # add noise with a given probability
     noise_matrix = np.zeros_like(ciphertext_matrix)
@@ -42,7 +42,7 @@ def noise_encode(plaintext: str, m: int, noise_percentage: int) -> str:
     print("Noisy Ciphertext Matrix:\n", noisy_ciphertext_matrix)
     print("Ciphertext:", ciphertext)
 
-    return noisy_ciphertext
+    return noisy_ciphertext, noisy_ciphertext_matrix
 
 if __name__=="__main__":
     # set parameters for testing
@@ -50,5 +50,5 @@ if __name__=="__main__":
     plaintext = "CAT"
 
     print("Plaintext:", plaintext)
-    noisy_ciphertext = noise_encode(plaintext, m, 50) # add noise parameter of 50
+    noisy_ciphertext = noise_encode(plaintext, m, 50)[0] # add noise parameter of 50
     print("Noisy Ciphertext:", noisy_ciphertext)
