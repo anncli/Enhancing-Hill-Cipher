@@ -44,7 +44,7 @@ def plaintext_encode(plaintext: str, m: int) -> str:
     print("Plaintext Matrix:\n", plaintext_matrix)
     print("Ciphertext Matrix:\n", ciphertext_matrix)
 
-    return ciphertext
+    return ciphertext, ciphertext_matrix
 
 if __name__=="__main__":
     # set parameters for testing
@@ -52,5 +52,5 @@ if __name__=="__main__":
     plaintext = "CAT"
 
     print("Plaintext:", plaintext)
-    ciphertext = plaintext_encode(plaintext, m)
+    ciphertext = plaintext_encode(plaintext, m)[0]
     print("Ciphertext:", ciphertext)

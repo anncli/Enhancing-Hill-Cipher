@@ -1,5 +1,6 @@
 import numpy as np
 import secrets
+from generate_ciphertext import plaintext_encode
 
 letters_to_num = dict({
     'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9, 
@@ -12,30 +13,9 @@ num_to_letters = dict({
     19: 'T', 20: 'U', 21: 'V', 22: 'W', 23: 'X', 24: 'Y', 25: 'Z'
 })
 
-def plaintext_encode(plaintext: str, m: int, noise_percentage: int) -> str:
-    key_matrix = np.zeros((m, m)) # initialize empty key array
+def noise_encode(plaintext: str, m: int, noise_percentage: int) -> str:
+    ciphertext, ciphertext_matrix = plaintext_encode(plaintext, m)
 
-    # insert random values into key matrix
-    # we need an invertible key matrix for decoding
-    while np.linalg.det(key_matrix) == 0: # continue generating key matrices until an invertible one is found
-        for i in range(m):
-            for j in range(m):
-                key_matrix[i, j] = secrets.randbelow(26)
-
-
-    # convert plaintext into mx1 vector
-    plaintext_matrix = []
-    for c in plaintext:
-        plaintext_matrix.append(letters_to_num[c])
-    plaintext_matrix = np.atleast_2d(np.array(plaintext_matrix)).T # convert into mx1 numpy array
-
-
-    # create ciphertext matrix
-    ciphertext_matrix = np.matmul(key_matrix, plaintext_matrix)
-    # convert values to valid range (0-25)
-    ciphertext_matrix = ciphertext_matrix % 26
-
-    
     # add noise with a given probability
     noise_matrix = np.zeros_like(ciphertext_matrix)
     for i in range(m):
@@ -58,9 +38,6 @@ def plaintext_encode(plaintext: str, m: int, noise_percentage: int) -> str:
         noisy_ciphertext += num_to_letters[noisy_ciphertext_matrix[k, 0]]
 
 
-    print("Key Matrix:\n", key_matrix)
-    print("Plaintext Matrix:\n", plaintext_matrix)
-    print("Ciphertext Matrix:\n", ciphertext_matrix)
     print("Noise Matrix:\n", noise_matrix)
     print("Noisy Ciphertext Matrix:\n", noisy_ciphertext_matrix)
     print("Ciphertext:", ciphertext)
@@ -73,5 +50,5 @@ if __name__=="__main__":
     plaintext = "CAT"
 
     print("Plaintext:", plaintext)
-    noisy_ciphertext = plaintext_encode(plaintext, m, 50) # add noise parameter of 50
+    noisy_ciphertext = noise_encode(plaintext, m, 50) # add noise parameter of 50
     print("Noisy Ciphertext:", noisy_ciphertext)

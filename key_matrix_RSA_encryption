@@ -13,7 +13,7 @@ num_to_letters = dict({
     19: 'T', 20: 'U', 21: 'V', 22: 'W', 23: 'X', 24: 'Y', 25: 'Z'
 })
 
-def plaintext_encode(plaintext: str, m: int) -> str:
+def rsa_encode(plaintext: str, m: int) -> str:
     key_matrix = np.zeros((m, m)) # initialize empty key array
 
     # insert random values into key matrix
@@ -87,5 +87,5 @@ if __name__=="__main__":
     plaintext = "CAT"
 
     print("Plaintext:", plaintext)
-    ciphertext = plaintext_encode(plaintext, m)
+    ciphertext = rsa_encode(plaintext, m)
     print("Ciphertext:", ciphertext)
